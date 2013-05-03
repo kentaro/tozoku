@@ -1,0 +1,2 @@
+class Tozoku::Strategy
+end
