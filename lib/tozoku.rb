@@ -1,4 +1,5 @@
 require 'tozoku/version'
+require 'tozoku/strategy'
 
 class Tozoku
   attr_reader :strategy
