@@ -6,7 +6,7 @@ class Tozoku
 
   def initialize(strategy, arms)
     file_name = file_name_for(strategy)
-    require   = file_name
+    require(file_name)
 
     @strategy = strategy_class_for(strategy).new(arms)
   end
