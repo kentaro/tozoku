@@ -1,4 +1,4 @@
-# Tozoku
+# Tozoku [![BuildStatus](https://secure.travis-ci.org/kentaro/tozoku.png)](http://travis-ci.org/kentaro/tozoku)
 
 TODO: Write a gem description
 

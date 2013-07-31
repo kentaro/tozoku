@@ -1,39 +1,29 @@
 require 'tozoku/version'
-require 'tozoku/strategy/epsilon_greedy'
 
 class Tozoku
-  STRATEGIES = %w(EpsilonGreedy)
+  attr_reader :strategy
 
-  attr_reader :arm_count, :counts, :values, :strategies
+  def initialize(strategy, arms)
+    file_name = file_name_for(strategy)
+    require   = file_name
 
-  def initialize(arm_count, counts = nil, values = nil)
-    @arm_count  = arm_count
-    @counts     = counts || arm_count.map { |i| 0   }
-    @values     = values || arm_count.map { |i| 0.0 }
-    @strategies = STRATEGIES.each_with_object({}) do |name, strategies|
-      klass = class_constant_from(name)
-      strategies[strategy_name] = klass.new(
-        counts.dup,
-        values.dup,
-      )
-    end
+    @strategy = strategy_class_for(strategy).new(arms)
   end
 
   def select_arm(args)
-    strategy_name = args[:with] || 'EpsilonGreedy'
-    strategy_args = args[:args] || {}
-    strategy      = strategies[strategy_name]
-
-    strategy.select_arm(args)
+    @strategy.select_arm(args)
   end
 
   def update(chosen_arm, reward)
-    strategies.values.each do |strategy|
-      strategy.update(chosen_arm, reward)
-    end
+    @strategy.update(chosen_arm, reward)
   end
 
-  def class_constant_from(strategy)
-    Kernel.const_get(self.class.to_s).const_get('Strategy').const_get(strategy)
+  def strategy_class_for(strategy)
+    Kernel.const_get(self.class.to_s).const_get('Strategy').const_get(strategy.to_s)
+  end
+
+  def file_name_for(strategy)
+    file_name = strategy.to_s.gsub(/[A-Z][a-z0-9_]+?/) { |s| "_#{s.downcase}" }
+    'tozoku/strategy/' + file_name.sub(/^_/, '')
   end
 end

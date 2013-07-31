@@ -1,26 +1,30 @@
-class Tozoku::Strategy::EpsilonGreedy
-  attr_accessor :counts, :values, :epsilon
+class Tozoku
+  module Strategy
+    class EpsilonGreedy
+      attr_reader :arms
 
-  def initialize(counts, values)
-    @counts = connts
-    @values = values
-  end
+      def initialize(arms)
+        @arms = arms
+      end
 
-  def select_arm(args)
-    epsilon = args[:epsilon] || 0.1
+      def select_arm(args = {})
+        epsilon = args[:epsilon] || 0.1
+        values  = arms.map { |a| a['value'] }
+        index   = if rand > epsilon
+                    values.index(values.max)
+                  else
+                    rand(values.length)
+                  end
 
-    if rand > epsilon
-      values.index(values.max)
-    else
-      rand(values.length)
+        arms[index]
+      end
+
+      def update(arm, reward)
+        chosen = arms.first { |a| a['name'] == arm }
+        count  = chosen['count'] += 1
+
+        chosen['value'] = ((count - 1)/count) * chosen['value'] + (1/count) * reward
+      end
     end
-  end
-
-  def update(chosen_arm, reward)
-    count = counts[chosen_arm] += 1
-    value = values[chosen_arm]
-
-    values[chosen_arm] = ((count - 1)/count) * value +
-                         (1/count) * reward
   end
 end
