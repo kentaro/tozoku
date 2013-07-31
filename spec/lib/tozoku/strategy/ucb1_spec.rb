@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'tozoku/strategy/ucb1'
 
-describe Tozoku::Strategy::UCB1 do
+describe Tozoku::Strategy::Ucb1 do
   let(:arms) {
     [
       { 'name' => '1st', 'count' => 0, 'value' => 0 },

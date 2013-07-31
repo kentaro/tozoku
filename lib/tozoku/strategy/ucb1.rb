@@ -1,4 +1,4 @@
-class Tozoku::Strategy::UCB1 < Tozoku::Strategy
+class Tozoku::Strategy::Ucb1 < Tozoku::Strategy
   def select_arm(args = {})
     # Returns an arm if there's one that has not been selected yet
     if arm = arms.find { |a| a['count'] == 0 }
